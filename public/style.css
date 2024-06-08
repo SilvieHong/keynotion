@@ -19,6 +19,14 @@
   font-size: 3rem;
   font-family: "NEXON Lv1 Gothic";
 }
+button {
+  margin-top: 2rem;
+  border-radius: 20px;
+  border: 5px solid #000;
+  background: rgba(217, 217, 217, 0.46);
+  font-size: 3rem;
+  font-family: "NEXON Lv1 Gothic";
+}
 
 img {
   display: block;
