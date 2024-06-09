@@ -31,15 +31,15 @@ document.getElementById("answer-btn").addEventListener("click", () => {
 
 // 질문 듣기 이벤트 핸들러
 document.getElementById("ask-btn").addEventListener("click", () => {
-  askQuestion();
+  askQuestion(jsonData[currentIndex - 1]);
 });
 
 // 질문듣기(TTS)
-function askQuestion(jsonData) {
+function askQuestion(question) {
   var data = {
     voice: { languageCode: "ko-KR" },
     input: {
-      text: "안녕하세요", // 말하는지 테스트중입니다
+      text: question.title,
     },
     audioConfig: {
       audioEncoding: "mp3",
