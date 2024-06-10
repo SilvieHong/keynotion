@@ -3,26 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="style.css" />
-    <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <title>Interview</title>
   </head>
   <body>
-    <header>Notion API 와 구글TTS API를 이용한 모의면접 ON DEV 🔥🔥🔥</header>
-
     <main>
-      <div class="">
-        <div class="person">
-          <img src="/images/person.png" />
-        </div>
-        <div class="board">
-          <div id="data-display">다음 버튼을 클릭하세요</div>
-        </div>
+      <header id="idx">화이팅!</header>
+      <div class="person">
+        <img src="/images/person.png" id="boss" onclick="initQuestion()" />
       </div>
-      <button id="next-btn">다음</button>
-      <button id="answer-btn">답안</button>
-      <button id="ask-btn">듣기</button>
+      <div class="board">
+        <div id="data-display">시작하려면 나를 클릭하세요</div>
+      </div>
+      <div class="buttons">
+        <button id="ask-btn">듣기</button>
+        <button id="answer-btn">답안</button>
+        <button id="back-btn">질문</button>
+        <button id="next-btn">다음</button>
+      </div>
     </main>
-
     <script defer src="main.js"></script>
   </body>
 </html>

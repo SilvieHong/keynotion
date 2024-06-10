@@ -17,9 +17,7 @@ module.exports = async function getDatabases() {
 
   const interviews = results.map((page) => {
     return {
-      id: page.id,
-      title: page.properties.이름?.title[0].text.content,
-      status: page.properties.태그.status.name,
+      title: page.properties.이름.title[0].text.content,
       content: page.properties.내용.rich_text[0].plain_text,
     };
   });

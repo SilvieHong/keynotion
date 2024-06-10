@@ -1,5 +1,9 @@
 const interviewEl = document.querySelector("#interviews");
 const div = document.getElementById("data-display");
+const askBtn = document.getElementById("ask-btn");
+const answerBtn = document.getElementById("answer-btn");
+const nextBtn = document.getElementById("next-btn");
+const backBtn = document.getElementById("back-btn");
 
 // JSON 데이터를 불러오기
 async function getDatabasesFromBackend() {
@@ -7,32 +11,52 @@ async function getDatabasesFromBackend() {
   const data = await res.json();
   return data;
 }
-
-// 데이터를 하나씩 보여줄 인덱스를 저장하는 변수
 let currentIndex = 0;
 let jsonData = [];
 
+// 처음 진입
+function initQuestion() {
+  getQuestion();
+  $("#idx").show();
+}
+
 // 다음 클릭 이벤트 핸들러
-document.getElementById("next-btn").addEventListener("click", () => {
+nextBtn.addEventListener("click", () => {
+  getQuestion();
+});
+
+// 답안 클릭 이벤트 핸들러
+answerBtn.addEventListener("click", () => {
+  currentIndex--;
+  displayAnswer(jsonData[currentIndex]);
+  currentIndex++;
+  addBackButton();
+});
+
+// 질문 듣기 이벤트 핸들러
+askBtn.addEventListener("click", () => {
+  askQuestion(jsonData[currentIndex - 1]);
+});
+
+// 답안 -> 질문 이벤트 핸들러
+backBtn.addEventListener("click", () => {
+  currentIndex--;
+  getQuestion();
+});
+
+// 질문 가져오는 함수
+function getQuestion() {
+  getIndex();
+  showAllButton();
   if (currentIndex < jsonData.length) {
     displayQuestion(jsonData[currentIndex]);
     currentIndex++;
   } else {
-    alert("No more items to display");
+    currentIndex = 0;
+    initQuestion();
+    alert("끝났습니다. 처음으로 돌아갑니다");
   }
-});
-
-// 답안 클릭 이벤트 핸들러
-document.getElementById("answer-btn").addEventListener("click", () => {
-  currentIndex--;
-  displayAnswer(jsonData[currentIndex]);
-  currentIndex++;
-});
-
-// 질문 듣기 이벤트 핸들러
-document.getElementById("ask-btn").addEventListener("click", () => {
-  askQuestion(jsonData[currentIndex - 1]);
-});
+}
 
 // 질문듣기(TTS)
 function askQuestion(question) {
@@ -46,14 +70,13 @@ function askQuestion(question) {
     },
   };
 
-  //fetch로 바꿔볼까
   $.ajax({
     type: "POST",
-    url: "https://texttospeech.googleapis.com/v1/text:synthesize?key=발급받은_구글_API_KEY",
+    url: "https://texttospeech.googleapis.com/v1/text:synthesize?key=구글API키",
     data: JSON.stringify(data),
     contentType: "application/json;charset-UTF-8",
     success: function (res) {
-      var audioFile = new Audio();
+      const audioFile = new Audio();
       let audioBlob = base64ToBlob(res.audioContent, "mp3");
       audioFile.src = window.URL.createObjectURL(audioBlob);
       audioFile.playbackRate = 1; //재생속도
@@ -84,6 +107,11 @@ function base64ToBlob(base64, fileType) {
   });
 }
 
+// 질문 인덱스 표시하는 함수
+function getIndex() {
+  $("#idx").text(currentIndex + 1 + " / " + jsonData.length);
+}
+
 // 답안을 화면에 표시하는 함수
 function displayAnswer(data) {
   div.innerHTML = `
@@ -98,6 +126,20 @@ function displayQuestion(data) {
     `;
 }
 
+// 모든 버튼 보여주기
+function showAllButton() {
+  $("#next-btn").show();
+  $("#ask-btn").show();
+  $("#answer-btn").show();
+  $("#back-btn").hide();
+}
+
+// 질문버튼 보이기
+function addBackButton() {
+  $("#ask-btn").hide();
+  $("#answer-btn").hide();
+  $("#back-btn").show();
+}
 window.onload = async () => {
   jsonData = await getDatabasesFromBackend();
 };
